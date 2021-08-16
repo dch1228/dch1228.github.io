@@ -1,0 +1,34 @@
+index:
+  banner_img: /img/bg.jpg
+  banner_img_height: 70
+  slogan:
+    enable: false
+  post_meta:
+    date: true
+    tag: true
+
+navbar:
+  blog_title: dch's notebook
+  navbar:
+  menu:
+    # - { key: 'home', link: '/', icon: 'iconfont icon-home-fill' }
+    # - { key: 'tag', link: '/tags/', icon: 'iconfont icon-tags-fill' }
+    # - { key: 'about', link: '/about/', icon: 'iconfont icon-user-fill', name: '关于' }
+
+post:
+  banner_img: /img/bg.jpg
+
+tag:
+  banner_img: /img/bg.jpg
+
+category:
+  banner_img: /img/bg.jpg
+
+about:
+  banner_img: /img/bg.jpg
+#   icons:
+#     - { class: 'iconfont icon-github-fill', link: 'https://github.com', tip: 'GitHub' }
+
+fun_features:
+  typing:
+    enable: false
