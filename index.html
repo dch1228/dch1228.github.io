@@ -40,7 +40,7 @@
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.11","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.11","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":3},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}},"search_path":"/local-search.xml"};
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
@@ -120,18 +120,25 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2021/08/16/Go%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-1-Goroutine/" target="_self">
-          Go并发编程(1) Goroutine
+        <a href="/2021/08/18/go/error-handle/" target="_self">
+          Go 错误处理
         </a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2021/08/16/Go%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-1-Goroutine/" target="_self">
+        <a href="/2021/08/18/go/error-handle/" target="_self">
           
           
             
           
-          
+          常见姿势Sentinel error哨兵模式，在包中预定义一些错误变量，调用者通过导入这些变量进行等值比较。
+例如 io 库中的 EOF
+1var EOF = errors.New(&quot;EOF&quot;)
+
+在外部通过 == 来判断
+123if err == io.EOF &#123;	// ...&#125;
+
+这种方式的问题在于把 error 当作 API 暴露给第三方，导致 API
         </a>
       </p>
 
@@ -139,19 +146,19 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2021-08-16 15:55" pubdate>
-              2021-08-16
+            <time datetime="2021-08-18 00:00" pubdate>
+              2021-08-18
             </time>
           </div>
         
         
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
             
-              <a href="/categories/Go%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">Go并发编程</a>
+              <a href="/tags/go/">go</a>
             
           </div>
-        
         
       </div>
     </article>

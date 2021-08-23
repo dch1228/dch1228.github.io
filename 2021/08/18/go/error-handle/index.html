@@ -1,0 +1,410 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="dch">
+  <meta name="keywords" content="">
+  
+  <title>Go 错误处理 - dch&#39;s notebook</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.7.2/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.11","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":3},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>dch's notebook</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/bg.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Go 错误处理">
+              
+                Go 错误处理
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-08-18 00:00" pubdate>
+        2021年8月18日 凌晨
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.7k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      25
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Go 错误处理</h1>
+            
+            <div class="markdown-body">
+              <h1 id="常见姿势"><a href="#常见姿势" class="headerlink" title="常见姿势"></a>常见姿势</h1><h2 id="Sentinel-error"><a href="#Sentinel-error" class="headerlink" title="Sentinel error"></a>Sentinel error</h2><p>哨兵模式，在包中预定义一些错误变量，调用者通过导入这些变量进行等值比较。</p>
+<p>例如 io 库中的 EOF</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">var</span> EOF = errors.New(<span class="hljs-string">&quot;EOF&quot;</span>)<br></code></pre></td></tr></table></figure>
+
+<p>在外部通过 == 来判断</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">if</span> err == io.EOF &#123;<br>	<span class="hljs-comment">// ...</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这种方式的问题在于把 error 当作 API 暴露给第三方，导致 API 变得脆弱。不利于后期重构，而且这种方式能提供的信息十分有限。</p>
+<h2 id="Error-types"><a href="#Error-types" class="headerlink" title="Error types"></a>Error types</h2><p>实现了 <code>error</code> 接口的自定义类型。</p>
+<p>例如 os 库中的 PathError</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">type</span> PathError <span class="hljs-keyword">struct</span> &#123;<br>	Op   <span class="hljs-keyword">string</span><br>	Path <span class="hljs-keyword">string</span><br>	Err  error<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(e *PathError)</span> <span class="hljs-title">Error</span><span class="hljs-params">()</span> <span class="hljs-title">string</span></span> &#123; <span class="hljs-keyword">return</span> e.Op + <span class="hljs-string">&quot; &quot;</span> + e.Path + <span class="hljs-string">&quot;: &quot;</span> + e.Err.Error() &#125;<br></code></pre></td></tr></table></figure>
+
+<p>在外部通过类型断言来判断</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">switch</span> err := err.(<span class="hljs-keyword">type</span>) &#123;<br><span class="hljs-keyword">case</span> <span class="hljs-literal">nil</span>:<br>	<span class="hljs-comment">// 没错误</span><br><span class="hljs-keyword">case</span> *os.PathError:<br>	<span class="hljs-comment">// ...</span><br><span class="hljs-keyword">default</span>:<br>	<span class="hljs-comment">// 其他错误</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这种方式虽然提供了更多的上下文信息，但同样需要暴露给外部，并且可能创建很多 error values 相同的错误。error 值的判定需要使用类型断言，写起来比较麻烦。</p>
+<h2 id="Opaque-errors"><a href="#Opaque-errors" class="headerlink" title="Opaque errors"></a>Opaque errors</h2><p>比较灵活的错误处理策略，他要求代码和调用者之间的耦合最少。调用者只知道发生了错误，但是看不到错误的内部，调用者只关心有没有成功。</p>
+<p>这就是不透明错误处理的全部功能，只需返回错误而不假设其内容。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs go">val, err := bar.Foo()<br><span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>	<span class="hljs-keyword">return</span> err<br>&#125;<br><span class="hljs-comment">// use val</span><br></code></pre></td></tr></table></figure>
+
+<p>在极少数情况，调用方需要调查错误的性质，以确定重试机制是否合理。在这种情况下，我们可以断言错误实现了特定的行为，而不是断言错误是特定的类型或值。</p>
+<p>例如 net 库中的 Error</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-comment">// net 库</span><br><span class="hljs-keyword">type</span> Error <span class="hljs-keyword">interface</span> &#123;<br>	error<br>	Timeout() <span class="hljs-keyword">bool</span>   <span class="hljs-comment">// Is the error a timeout?</span><br>	Temporary() <span class="hljs-keyword">bool</span> <span class="hljs-comment">// Is the error temporary?</span><br>&#125;<br><br><span class="hljs-comment">// 调用方</span><br><span class="hljs-keyword">if</span> nerr, ok := err.(net.Error); ok &#123;<br>	<span class="hljs-keyword">if</span> nerr.Temporary() &#123;<br>		<span class="hljs-comment">// 重试逻辑</span><br>	&#125;<br>&#125;<br><span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>	<span class="hljs-comment">// 处理其他错误</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="错误处理的代码优化"><a href="#错误处理的代码优化" class="headerlink" title="错误处理的代码优化"></a>错误处理的代码优化</h1><p>go 中经常包含大量 <code>if err</code> 代码，有一些方法可以减少这些代码。</p>
+<h2 id="AuthenticateRequest"><a href="#AuthenticateRequest" class="headerlink" title="AuthenticateRequest"></a>AuthenticateRequest</h2><p>在我们的项目中经常看到类似的代码</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">AuthenticateRequest</span><span class="hljs-params">(r *Request)</span> <span class="hljs-title">error</span></span> &#123;<br>    err := authenticate(r.User)<br>    <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>        <span class="hljs-keyword">return</span> err<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这里判断了 <code>err != nil</code> 但没有进一步的处理，直接返回可以少写很多代码</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">AuthenticateRequest</span><span class="hljs-params">(r *Request)</span> <span class="hljs-title">error</span></span> &#123;<br>    <span class="hljs-keyword">return</span> authenticate(r.User)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="CounterLines"><a href="#CounterLines" class="headerlink" title="CounterLines"></a>CounterLines</h2><p>统计 <code>io.Reader</code> 读取内容的行数</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">CounterLines</span><span class="hljs-params">(r io.Reader)</span> <span class="hljs-params">(<span class="hljs-keyword">int</span>, error)</span></span> &#123;<br>	<span class="hljs-keyword">var</span> (<br>		br    = bufio.NewReader(r)<br>		lines <span class="hljs-keyword">int</span><br>		err   error<br>	)<br><br>	<span class="hljs-keyword">for</span> &#123;<br>		_, err = br.ReadString(<span class="hljs-string">&#x27;\n&#x27;</span>)<br>		lines++<br>		<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>			<span class="hljs-keyword">break</span><br>		&#125;<br>	&#125;<br><br>	<span class="hljs-keyword">if</span> err != io.EOF &#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>, err<br><br>	&#125;<br>	<span class="hljs-keyword">return</span> lines, <span class="hljs-literal">nil</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>改进版本，消除了所有 <code>if err</code> 判断，因为 <code>sc.Scan</code> 做了很多处理。很多类似的场景都可以通过这种包装处理，这样外部包调用的代码就会很整洁。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">CounterLines</span><span class="hljs-params">(r io.Reader)</span> <span class="hljs-params">(<span class="hljs-keyword">int</span>, error)</span></span> &#123;<br>	sc := bufio.NewScanner(r)<br>	lines := <span class="hljs-number">0</span><br>	<span class="hljs-keyword">for</span> sc.Scan() &#123;<br>		lines++<br>	&#125;<br>	<span class="hljs-keyword">return</span> lines, sc.Err()<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="WriteResponse"><a href="#WriteResponse" class="headerlink" title="WriteResponse"></a>WriteResponse</h2><p>构建 HTTP/1.1 响应</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">type</span> Header <span class="hljs-keyword">struct</span> &#123;<br>	Key, Value <span class="hljs-keyword">string</span><br>&#125;<br><br><span class="hljs-keyword">type</span> Status <span class="hljs-keyword">struct</span> &#123;<br>	Code   <span class="hljs-keyword">int</span><br>	Reason <span class="hljs-keyword">string</span><br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">WriteResponse</span><span class="hljs-params">(w io.Writer, st Status, headers []Header, body io.Reader)</span> <span class="hljs-title">error</span></span> &#123;<br>	_, err := fmt.Fprintf(w, <span class="hljs-string">&quot;HTTP/1.1 %d %s\r\n&quot;</span>, st.Code, st.Reason)<br>	<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>		<span class="hljs-keyword">return</span> err<br>	&#125;<br><br>	<span class="hljs-keyword">for</span> _, header := <span class="hljs-keyword">range</span> headers &#123;<br>		_, err := fmt.Fprintf(w, <span class="hljs-string">&quot;%s: %s\r\n&quot;</span>, header.Key, header.Value)<br>		<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>			<span class="hljs-keyword">return</span> err<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-keyword">if</span> _, err := fmt.Fprint(w, <span class="hljs-string">&quot;\r\n&quot;</span>); err != <span class="hljs-literal">nil</span> &#123;<br>		<span class="hljs-keyword">return</span> err<br>	&#125;<br><br>	_, err = io.Copy(w, body)<br>	<span class="hljs-keyword">return</span> err<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>改进版本，<code>errWriter</code> 包装了 <code>io.Writer</code> 的 <code>Write</code> 方法。他将写操作传递给基础的 <code>Write</code> 方法直到发生错误，从那时起，他丢弃所有的写操作并返回上一个错误。</p>
+<p>在 <code>WriteResponse</code> 中引入 <code>errWriter</code> 显著提升了代码的清晰度。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">type</span> errWriter <span class="hljs-keyword">struct</span> &#123;<br>	io.Writer<br>	err error<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(e *errWriter)</span> <span class="hljs-title">Write</span><span class="hljs-params">(buf []<span class="hljs-keyword">byte</span>)</span> <span class="hljs-params">(<span class="hljs-keyword">int</span>, error)</span></span> &#123;<br>	<span class="hljs-keyword">if</span> e.err != <span class="hljs-literal">nil</span> &#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>, e.err<br>	&#125;<br><br>	<span class="hljs-keyword">var</span> n <span class="hljs-keyword">int</span><br>	n, e.err = e.Writer.Write(buf)<br>	<span class="hljs-keyword">return</span> n, <span class="hljs-literal">nil</span><br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">WriteResponse</span><span class="hljs-params">(w io.Writer, st Status, headers []Header, body io.Reader)</span> <span class="hljs-title">error</span></span> &#123;<br>	ew := &amp;errWriter&#123;Writer: w&#125;<br><br>	fmt.Fprintf(ew, <span class="hljs-string">&quot;HTTP/1.1 %d %s\r\n&quot;</span>, st.Code, st.Reason)<br><br>	<span class="hljs-keyword">for</span> _, header := <span class="hljs-keyword">range</span> headers &#123;<br>		fmt.Fprintf(ew, <span class="hljs-string">&quot;%s: %s\r\n&quot;</span>, header.Key, header.Value)<br>	&#125;<br><br>	fmt.Fprint(w, <span class="hljs-string">&quot;\r\n&quot;</span>)<br><br>	io.Copy(w, body)<br><br>	<span class="hljs-keyword">return</span> ew.err<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="错误只应该处理一次"><a href="#错误只应该处理一次" class="headerlink" title="错误只应该处理一次"></a>错误只应该处理一次</h2><p>这个例子中包含两个问题</p>
+<ul>
+<li>在 JSON 序列化失败后，检查并记录了错误，但是没有 return，这将把损坏的缓冲区传递给 WriteAll，这可能成功，因此配置文件中写入了错误的内容，但是该函数并没有返回错误。</li>
+<li>在 WriteAll 过程中发生了一个错误，那么一行代码将被写入日志文件中，记录错误发生的文件和行，并且错误也会返回给调用者，调用者可能会记录并返回它，一直返回到程序的顶部。错误被处理了多次。</li>
+<li>日志记录与错误无关且对调试没有帮助的信息应被视为噪音，应予以质疑。记录的原因是因为某些东西失败了，而日志包含了答案。</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">WriteConfig</span><span class="hljs-params">(w io.Writer, conf *Conf)</span> <span class="hljs-title">error</span></span> &#123;<br>	buf, err := json.Marshal(conf)<br>	<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>		log.Printf(<span class="hljs-string">&quot;could not marshal config: %v&quot;</span>, err)<br>		<span class="hljs-comment">// oops, forgot to return</span><br>	&#125;<br><br>	<span class="hljs-keyword">if</span> err := WriteAll(w, buf); err != <span class="hljs-literal">nil</span> &#123;<br>		log.Printf(<span class="hljs-string">&quot;could not write config: %v&quot;</span>, err)<br>		<span class="hljs-keyword">return</span> err<br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span><br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	err := WriteConfig(f, &amp;conf)<br>	log.Printf(<span class="hljs-string">&quot;could not write config: %v&quot;</span>, err)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="错误包装"><a href="#错误包装" class="headerlink" title="错误包装"></a>错误包装</h1><p>在之前 <code>AuthenticateRequest</code> 的例子中，我们透传了 error 给调用方，调用方可能也会这么做，依此类推。在程序的顶部将错误打印到屏幕或日志文件中，打印出来的只是：没有这样的文件或目录。</p>
+<p>没有生成错误的 <code>file:line</code> 信息，没有导致错误的调用堆栈跟踪，给错误排查造成了很大的困难。</p>
+<p>使用 <a target="_blank" rel="noopener" href="https://github.com/pkg/errors">github.com/pkg/errors</a> 可以包装错误。</p>
+<p>例子，在 dao 层遇到错误该如何处理</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;database/sql&quot;</span><br>	<span class="hljs-string">&quot;fmt&quot;</span><br><br>	<span class="hljs-string">&quot;github.com/gin-gonic/gin&quot;</span><br>	<span class="hljs-string">&quot;github.com/pkg/errors&quot;</span><br>)<br><br><span class="hljs-keyword">type</span> Todo <span class="hljs-keyword">struct</span> &#123;<br>	Id    <span class="hljs-keyword">string</span><br>	Title <span class="hljs-keyword">string</span><br>&#125;<br><br><span class="hljs-comment">// dao 层</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">daoGetTodoById</span><span class="hljs-params">(id <span class="hljs-keyword">string</span>)</span> <span class="hljs-params">(out *Todo, err error)</span></span> &#123;<br>	<span class="hljs-comment">// 根据id模拟一些错误</span><br>	<span class="hljs-keyword">switch</span> id &#123;<br>	<span class="hljs-keyword">case</span> <span class="hljs-string">&quot;0&quot;</span>:<br>		err = sql.ErrNoRows<br>	<span class="hljs-keyword">case</span> <span class="hljs-string">&quot;1&quot;</span>:<br>		err = sql.ErrConnDone<br>	<span class="hljs-keyword">default</span>:<br>		out = &amp;Todo&#123;<br>			Id:    id,<br>			Title: <span class="hljs-string">&quot;&quot;</span>,<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>		<span class="hljs-comment">// wrap err</span><br>		<span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>, errors.Wrapf(err, <span class="hljs-string">&quot;daoGetTodoByIdErr, id: %s&quot;</span>, id)<br>	&#125;<br><br>	<span class="hljs-keyword">return</span> out, <span class="hljs-literal">nil</span><br>&#125;<br><br><span class="hljs-comment">// service 层</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">serviceGetTodoById</span><span class="hljs-params">(id <span class="hljs-keyword">string</span>)</span> <span class="hljs-params">(*Todo, error)</span></span> &#123;<br>	todo, err := daoGetTodoById(id)<br>	<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>, err<br>	&#125;<br>	<span class="hljs-keyword">return</span> todo, <span class="hljs-literal">nil</span><br>&#125;<br><br><span class="hljs-comment">// handler 层</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">handlerGetTodoById</span><span class="hljs-params">(ctx *gin.Context)</span></span> &#123;<br>	id := ctx.Param(<span class="hljs-string">&quot;id&quot;</span>)<br><br>	todo, err := serviceGetTodoById(id)<br>	<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>		<span class="hljs-keyword">if</span> errors.Is(err, sql.ErrNoRows) &#123;<br>			ctx.JSON(<span class="hljs-number">404</span>, gin.H&#123;<br>				<span class="hljs-string">&quot;code&quot;</span>: <span class="hljs-number">404</span>,<br>				<span class="hljs-string">&quot;msg&quot;</span>:  <span class="hljs-string">&quot;todo not found&quot;</span>,<br>			&#125;)<br>		&#125; <span class="hljs-keyword">else</span> &#123;<br>			<span class="hljs-comment">// 其他错误需要记录日志</span><br>			fmt.Printf(<span class="hljs-string">&quot;%+v\n&quot;</span>, err)<br>			ctx.JSON(<span class="hljs-number">500</span>, gin.H&#123;<br>				<span class="hljs-string">&quot;code&quot;</span>: <span class="hljs-number">500</span>,<br>				<span class="hljs-string">&quot;msg&quot;</span>:  <span class="hljs-string">&quot;internal error&quot;</span>,<br>			&#125;)<br>		&#125;<br>		<span class="hljs-keyword">return</span><br>	&#125;<br>	ctx.JSON(<span class="hljs-number">200</span>, todo)<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	r := gin.New()<br><br>	r.GET(<span class="hljs-string">&quot;/todo/:id&quot;</span>, handlerGetTodoById)<br><br>	_ = r.Run(<span class="hljs-string">&quot;:8000&quot;</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><p><a target="_blank" rel="noopener" href="https://dave.cheney.net/2019/01/27/eliminate-error-handling-by-eliminating-errors">Eliminate error handling by eliminating errors
+</a></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/go/">go</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.3/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.1/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js" ></script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
