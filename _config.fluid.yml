@@ -3,13 +3,9 @@ index:
   banner_img_height: 70
   slogan:
     enable: false
-  post_meta:
-    date: true
-    tag: true
 
 navbar:
   blog_title: dch's notebook
-  navbar:
   menu:
     # - { key: 'home', link: '/', icon: 'iconfont icon-home-fill' }
     # - { key: 'tag', link: '/tags/', icon: 'iconfont icon-tags-fill' }
@@ -17,6 +13,11 @@ navbar:
 
 post:
   banner_img: /img/bg.jpg
+
+  toc:
+    enable: true
+    headingSelector: "h1,h2,h3,h4,h5,h6"
+    collapseDepth: 3
 
 tag:
   banner_img: /img/bg.jpg
