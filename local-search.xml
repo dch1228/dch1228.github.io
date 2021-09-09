@@ -4,6 +4,27 @@
   
   
   <entry>
+    <title>分布式事务</title>
+    <link href="/2021/09/01/microservices/distributed-transaction/"/>
+    <url>/2021/09/01/microservices/distributed-transaction/</url>
+    
+    <content type="html"><![CDATA[<h1 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h1><h2 id="转账"><a href="#转账" class="headerlink" title="转账"></a>转账</h2><p>支付宝账户表：A(id, user_id, amount)<br>余额宝账户表：B(id, user_id, amount)</p><p>user_id = 1 的用户，从支付宝转账 1 万元到余额宝分为两个步骤：</p><ol><li>支付宝账户表扣款 1 万元</li><li>余额宝账户表增加 1 万元</li></ol><p>在 MySQL 中，可以通过事务保证一致性</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs mysql">begin;<br>update A set amount=amount-10000 where user_id=1;<br>update B set amount=amount+10000 where user_id=1;<br>commit;<br></code></pre></td></tr></table></figure><p>随着系统变大，我们进行了微服务的改造，每个微服务独占一个数据库。这时转账动作跨越了两个微服务：pay 和 balance。如何保证跨服务的事物一致性？</p><h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><h2 id="事务消息"><a href="#事务消息" class="headerlink" title="事务消息"></a>事务消息</h2><p>首先系统应该保证每个服务自身的 ACID，基于此，我们可以通过事务消息来保证一致性。</p><p>在扣款的同时创建一条消息，消息里记录“让 user_id=1 的余额宝账户增加 1 万元”。我们通过这个凭证保证最终一致性。</p><h2 id="Best-Effort"><a href="#Best-Effort" class="headerlink" title="Best Effort"></a>Best Effort</h2><h2 id="Transactional-outbox"><a href="#Transactional-outbox" class="headerlink" title="Transactional outbox"></a>Transactional outbox</h2><h2 id="Polling-publisher"><a href="#Polling-publisher" class="headerlink" title="Polling publisher"></a>Polling publisher</h2><h2 id="Transaction-log-tailing"><a href="#Transaction-log-tailing" class="headerlink" title="Transaction log tailing"></a>Transaction log tailing</h2><h2 id="幂等"><a href="#幂等" class="headerlink" title="幂等"></a>幂等</h2><h2 id="2PC"><a href="#2PC" class="headerlink" title="2PC"></a>2PC</h2><h2 id="2PC-Message-Queue"><a href="#2PC-Message-Queue" class="headerlink" title="2PC Message Queue"></a>2PC Message Queue</h2><h2 id="Seata-2PC"><a href="#Seata-2PC" class="headerlink" title="Seata 2PC"></a>Seata 2PC</h2><h2 id="TCC"><a href="#TCC" class="headerlink" title="TCC"></a>TCC</h2>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>微服务</tag>
+      
+      <tag>分布式事务</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Go 错误处理</title>
     <link href="/2021/08/18/go/error-handle/"/>
     <url>/2021/08/18/go/error-handle/</url>

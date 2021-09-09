@@ -18,7 +18,7 @@
   <meta name="author" content="dch">
   <meta name="keywords" content="">
   
-  <title>dch&#39;s notebook</title>
+  <title>标签 - 分布式事务 - dch&#39;s notebook</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" />
 
@@ -48,7 +48,7 @@
 
 
 <body>
-  <header style="height: 70vh;">
+  <header style="height: 80vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
@@ -87,15 +87,19 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="">
+            <span class="h2" id="subtitle" title="标签 - 分布式事务">
               
-                
+                标签 - 分布式事务
               
             </span>
 
             
           </div>
 
+          
+            <div class="scroll-down-bar">
+              <i class="iconfont icon-arrowdown"></i>
+            </div>
           
         </div>
       </div>
@@ -113,108 +117,21 @@
               <div class="col-12 col-md-10 m-auto">
                 
 
-
-  <div class="row mx-auto index-card">
+<div class="list-group">
+  <p class="h4">共计 1 篇文章</p>
+  <hr>
+  
+  
     
+      
+      <p class="h5">2021</p>
     
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2021/09/01/microservices/distributed-transaction/" target="_self">
-          分布式事务
-        </a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2021/09/01/microservices/distributed-transaction/" target="_self">
-          
-          
-            
-          
-          使用场景转账支付宝账户表：A(id, user_id, amount)余额宝账户表：B(id, user_id, amount)
-user_id = 1 的用户，从支付宝转账 1 万元到余额宝分为两个步骤：
-
-支付宝账户表扣款 1 万元
-余额宝账户表增加 1 万元
-
-在 MySQL 中，可以通过事务保证一致性
-1234begin;update A set amount=amount-10000 w
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2021-09-01 16:57" pubdate>
-              2021-09-01
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">微服务</a>
-            
-              <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/">分布式事务</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2021/08/18/go/error-handle/" target="_self">
-          Go 错误处理
-        </a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2021/08/18/go/error-handle/" target="_self">
-          
-          
-            
-          
-          常见姿势Sentinel error哨兵模式，在包中预定义一些错误变量，调用者通过导入这些变量进行等值比较。
-例如 io 库中的 EOF
-1var EOF = errors.New(&quot;EOF&quot;)
-
-在外部通过 == 来判断
-123if err == io.EOF &#123;	// ...&#125;
-
-这种方式的问题在于把 error 当作 API 暴露给第三方，导致 API
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2021-08-18 00:00" pubdate>
-              2021-08-18
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/go/">go</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
+    <a href="/2021/09/01/microservices/distributed-transaction/" class="list-group-item list-group-item-action">
+      <span class="archive-post-title">分布式事务</span>
+      <time style="float: right;">09-01</time>
+    </a>
+  
+</div>
 
 
 
